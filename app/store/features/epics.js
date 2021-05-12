@@ -84,7 +84,6 @@ export const getUsersEpic = (action$, state) =>
     ),
   );
 
-
 /*export const axiosRequestEpic = (action$, state$, { axios }) =>
   action$.pipe(
     ofType(axiosRequest),
@@ -101,7 +100,7 @@ export const getUsersEpic = (action$, state) =>
   );*/
 
 //Czekanie na skonczenie sie dwóch requestów
-export const twoRequestsEpic = (action$, state$) =>
+/*export const twoRequestsEpic = (action$, state$) =>
   forkJoin(
     [
       action$.pipe(ofType(getTodosSuccess), take(1)),
@@ -109,7 +108,7 @@ export const twoRequestsEpic = (action$, state$) =>
     ]
   ).pipe(
     map(action => forkJoinAction())
-  )
+  )*/
 
 //Complicated
 export const apiRequestEpic = (action$, state$, { axios }) =>
