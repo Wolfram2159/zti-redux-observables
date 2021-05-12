@@ -6,10 +6,27 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ping } from '../../store/features/actions';
+import { connect } from 'react-redux';
 
-export default function App() {
+function App(props) {
+
+  useEffect(() => {
+    props.ping();
+  }, []);
+
   return (
     <div>App</div>
   );
 }
+
+const mapStateToProps = state => ({
+  state: state,
+});
+
+const mapDispatchToProps = {
+  ping: ping,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

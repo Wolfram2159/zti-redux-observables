@@ -7,10 +7,10 @@ import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
-import { pingEpic } from './store/features/epics';
+import * as epics from './store/features/epics';
 
 const rootEpic = combineEpics(
-  pingEpic
+  ...Object.values(epics)
 );
 
 const epicMiddleware = createEpicMiddleware();
