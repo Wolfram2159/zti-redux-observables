@@ -14,7 +14,7 @@ import pingReducer from './store/features/reducer';
  */
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
-    ping: pingReducer,
+    main: pingReducer,
     global: globalReducer,
     language: languageProviderReducer,
     router: connectRouter(history),
