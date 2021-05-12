@@ -8,12 +8,17 @@ import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import * as epics from './store/features/epics';
+import axios from './store/services/axios.service';
 
 const rootEpic = combineEpics(
   ...Object.values(epics)
 );
 
-const epicMiddleware = createEpicMiddleware();
+const epicMiddleware = createEpicMiddleware({
+  dependencies: {
+    axios
+  }
+});
 
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;

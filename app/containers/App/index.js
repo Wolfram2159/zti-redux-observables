@@ -7,17 +7,21 @@
  */
 
 import React, { useEffect } from 'react';
-import { ping } from '../../store/features/actions';
+import { cancel, ping } from '../../store/features/actions';
 import { connect } from 'react-redux';
 
 function App(props) {
 
-  useEffect(() => {
-    props.ping();
-  }, []);
-
   return (
-    <div>App</div>
+    <div>
+      App
+      <button onClick={() => props.ping()}>
+        Start
+      </button>
+      <button onClick={() => props.cancel()}>
+        Stop
+      </button>
+    </div>
   );
 }
 
@@ -27,6 +31,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   ping: ping,
+  cancel: cancel
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
