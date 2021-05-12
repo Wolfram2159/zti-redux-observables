@@ -6,6 +6,14 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
+import { pingEpic } from './store/features/epics';
+
+const rootEpic = combineEpics(
+  pingEpic
+);
+
+const epicMiddleware = createEpicMiddleware();
 
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;
@@ -32,7 +40,7 @@ export default function configureStore(initialState = {}, history) {
   // Create the store with two middlewares
   // 1. sagaMiddleware: Makes redux-sagas work
   // 2. routerMiddleware: Syncs the location/URL path to the state
-  const middlewares = [sagaMiddleware, routerMiddleware(history)];
+  const middlewares = [sagaMiddleware, routerMiddleware(history), epicMiddleware];
 
   const enhancers = [applyMiddleware(...middlewares)];
 
@@ -41,6 +49,8 @@ export default function configureStore(initialState = {}, history) {
     initialState,
     composeEnhancers(...enhancers),
   );
+
+  epicMiddleware.run(rootEpic);
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
