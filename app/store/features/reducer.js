@@ -1,6 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { axiosSuccess } from './actions';
+import { getTodosSuccess, getUsersSuccess } from './actions';
 
-export default createReducer({data: null}, {
-  [axiosSuccess]: (state, action) => action.payload.data
+export default createReducer({
+  todos: null,
+  users: null
+}, {
+  [getTodosSuccess]: (state, action) => {
+    state.todos = action.payload.data;
+  },
+  [getUsersSuccess]: (state, action) => {
+    state.users = action.payload.data;
+  }
 }, [], state => state);

@@ -1,13 +1,20 @@
 import React from 'react';
-import { axiosRequest, cancel, ping } from '../../store/features/actions';
+import {
+  cancel,
+  getTodoRequest,
+  getTodosRequest,
+  getUsersRequest,
+  ping,
+} from '../../store/features/actions';
 import { connect } from 'react-redux';
+import { getTodosWithUsers } from '../../store/features/selectors';
+import TodoListItem from '../../components/TodoListItem';
 
 function App(props) {
 
   return (
     <>
-      <div>
-        {console.log(props.state)}
+      <div>{ console.log(props.todosWithUsers) }
         Ping-pong
         <button onClick={ () => props.ping() }>
           Start
@@ -18,22 +25,37 @@ function App(props) {
       </div>
       <div>
         Request
-        <button onClick={ () => props.axiosRequest()}>
-          Send request
+        <button onClick={ () => props.getTodos() }>
+          GET TODOS
+        </button>
+        <button onClick={ () => props.getTodo(1) }>
+          GET TODO
+        </button>
+        <button onClick={ () => props.getUsers() }>
+          GET USERS
         </button>
       </div>
+      {
+        !props.todosWithUsers.isLoading &&
+        props.todosWithUsers.todos.map(todo =>
+          <TodoListItem key={ todo.id } id={ todo.id } />,
+        )
+      }
     </>
   );
 }
 
 const mapStateToProps = state => ({
   state: state.ping,
+  todosWithUsers: getTodosWithUsers(state),
 });
 
 const mapDispatchToProps = {
   ping: ping,
   cancel: cancel,
-  axiosRequest: axiosRequest
+  getTodos: getTodosRequest,
+  getTodo: getTodoRequest,
+  getUsers: getUsersRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
