@@ -28,3 +28,6 @@ export const getTodoFailure = createAction("GET_TODO_FAILURE");
 export const getUsersRequest = createAction("GET_USERS_REQUEST");
 export const getUsersSuccess = createAction("GET_USERS_SUCCESS");
 export const getUsersFailure = createAction("GET_USERS_FAILURE");
+
+export const forkJoinAction = createAction("FORK_JOIN");
+export const successAction = createAction("SUCCESS_ACTION");

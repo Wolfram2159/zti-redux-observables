@@ -1,10 +1,11 @@
-import { catchError, delay, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, delay, map, mergeMap, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { concat, forkJoin } from 'rxjs';
 import { ofType } from 'redux-observable';
 import {
   axiosFailure,
   axiosRequest,
   axiosSuccess,
-  cancel,
+  cancel, forkJoinAction,
   getTodoFailure,
   getTodoRequest,
   getTodosFailure,
@@ -15,7 +16,7 @@ import {
   getUsersRequest,
   getUsersSuccess,
   ping,
-  pong,
+  pong, successAction,
 } from './actions';
 import { from, of } from 'rxjs';
 
@@ -49,7 +50,7 @@ export const getTodosEpic = (action$, state) =>
         )),
         action$.pipe(
           ofType(getTodosSuccess),
-          map(successAction => cancel()), //Only example
+          map(todosSuccessAction => successAction()), //Only example
         ),
       ),
     ),
@@ -98,6 +99,17 @@ export const getUsersEpic = (action$, state) =>
       },
     ),
   );*/
+
+//Czekanie na skonczenie sie dwóch requestów
+export const twoRequestsEpic = (action$, state$) =>
+  forkJoin(
+    [
+      action$.pipe(ofType(getTodosSuccess), take(1)),
+      action$.pipe(ofType(getUsersSuccess), take(1))
+    ]
+  ).pipe(
+    map(action => forkJoinAction())
+  )
 
 //Complicated
 export const apiRequestEpic = (action$, state$, { axios }) =>
