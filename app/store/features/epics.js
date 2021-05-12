@@ -1,4 +1,4 @@
-import { catchError, delay, map, mergeMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, delay, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import {
   axiosFailure,
@@ -38,13 +38,19 @@ export const pongEpic = action$ =>
 export const getTodosEpic = (action$, state) =>
   action$.pipe(
     ofType(getTodosRequest),
-    map(action =>
-      axiosRequest(
-        'todos',
-        'GET',
-        {},
-        getTodosSuccess,
-        getTodosFailure,
+    switchMap(action =>
+      concat(
+        of(axiosRequest(
+          'todos',
+          'GET',
+          {},
+          getTodosSuccess,
+          getTodosFailure,
+        )),
+        action$.pipe(
+          ofType(getTodosSuccess),
+          map(successAction => cancel()), //Only example
+        ),
       ),
     ),
   );
